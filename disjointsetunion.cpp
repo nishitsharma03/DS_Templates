@@ -75,24 +75,8 @@ int main()
     	x--;
     	y--;
     	union_set(x,y);
-    	vector<int> ans;
-    	fab(0,n,i)
-    	{
-    		if(par[i]==i)
-    		{
-    			ans.pb(sz[i]);
-    		}
-
-    	}
-    	sort(all(ans));
-    	for(auto i: ans)
-    		cout<<i<<" ";
-    	cout<<endl;
+    	
     }
 
-
-	
-
- cerr << "time taken : " << (float)clock() / CLOCKS_PER_SEC << " secs" << endl;
 	return 0;
 }
