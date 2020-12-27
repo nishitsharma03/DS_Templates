@@ -12,7 +12,6 @@
 #define f first
 #define se second
 #define all(x) x.begin(),x.end()
-
 #define vll vector<ll>
 #define vi vector<int>
 #define pii pair<int,int>
@@ -30,7 +29,6 @@ using namespace std;
 const int N = 1e5 + 5;
 ll seg[4 * N], lazy[4 * N], a[N];
 
-//Build the tree
 void build( int node, int s, int e)
 {
 	if (s == e)
@@ -44,14 +42,12 @@ void build( int node, int s, int e)
 	seg[node] = min(seg[2 * node], seg[2 * node + 1]);
 }
 
-//Update range[l,r](closed interval).
 void updateRange(int node, int s, int e, int l, int r, int val)
 {
 	if (s > e)
 	{
 		return;
 	}
-  //Update the current node if there is a pending update.
 	if (lazy[node] != 0)
 	{
 		seg[node] += lazy[node];
@@ -64,19 +60,14 @@ void updateRange(int node, int s, int e, int l, int r, int val)
 		lazy[node] = 0;
 
 	}
-  //If out of range[l,r] return.
 	if (s > r or e < l)
 	{
 		return;
 	}
-  
-  //Complete overlap with the range [l,r].
+
 	if (s >= l and e <= r)
 	{
-  // Update the current node
 		seg[node] += val;
-    
-    //mark the child nodes for lazy update
 		if (s != e)
 		{
 			lazy[2 * node] += val;
@@ -85,23 +76,18 @@ void updateRange(int node, int s, int e, int l, int r, int val)
 		return;
 	}
 	int mid = (s + e) / 2;
-  
-  
+
 	updateRange(2 * node, s, mid, l, r, val);
 	updateRange(2 * node + 1, mid + 1, e, l, r, val);
-	
-  // important combine step
-  seg[node] = min(seg[2 * node], seg[2 * node + 1]);
+	seg[node] = min(seg[2 * node], seg[2 * node + 1]);
 }
 
 ll query( int node, int s, int e, int l, int r)
 {
-// if out of range return INF.
 	if (s > e or s > r or e < l)
 	{
 		return 1e18 + 2;
 	}
-  //If there is a pending update do that
 	if (lazy[node] != 0)
 	{
 		seg[node] += lazy[node];
@@ -114,7 +100,6 @@ ll query( int node, int s, int e, int l, int r)
 		lazy[node] = 0;
 
 	}
-  // Complete overlap with the range.
 	if (s >= l and e <= r)
 	{
 		return seg[node];
@@ -123,10 +108,18 @@ ll query( int node, int s, int e, int l, int r)
 	int mid = (s + e) / 2;
 	ll lf = query(2 * node, s, mid, l, r);
 	ll rt = query(2 * node + 1, mid + 1, e, l, r);
-  
-  // return min of left and right nodes.
-	return min(lf, rt); 
 
+	return min(lf, rt);
+
+}
+
+void init(int n)
+{
+	for ( int i = 0; i < 4 * n + 2; i++)
+	{
+		seg[i] = 0;
+		lazy[i] = 0;
+	}
 }
 
 
@@ -136,30 +129,43 @@ int main()
 	freopen("D:/sublime/input.txt", "r", stdin);
 	freopen("D:/sublime/output.txt", "w", stdout);
 #endif
-	int t;
-	cin >> t;
-	while (t--)
+	// int t;
+	// cin >> t;
+	// while (t--)
 	{
 		int n;
 		cin >> n;
-    
-		fab(0, 4 * n + 2, i)
-		{
-			seg[i] = 1;
-			lazy[i] = 0;
-		}
+		init(n);
+		int q;
+		cin >> q;
 
-		int y;
-		cin >> y;
-		while (y--)
+		for ( int i = 0; i < n; i++)
 		{
+			cin >> a[i];
+		}
+		build(1, 0, n - 1);
+
+
+		while (q--)
+		{
+			char tp;
+			cin >> tp;
 			int l, r;
 			cin >> l >> r;
-			ll val = query(1, 0, n - 1, l, r);
-			val %= MOD;
-			updateRange(1, 0, n - 1, l, r, val);
+
+			if (tp == 'u')
+			{
+				ll change = r - a[l - 1];
+				a[l - 1] = r;
+				updateRange(1, 0, n - 1, l - 1, l - 1, change);
+
+			}
+			else
+			{
+				ll val = query(1, 0, n - 1, l - 1, r - 1);
+				cout << val << endl;
+			}
 		}
-		cout << (query(1, 0, n - 1, 0, n - 1) % MOD) << endl;
 
 	}
 
