@@ -157,7 +157,7 @@ int main()
 			{
 				ll change = r - a[l - 1];
 				a[l - 1] = r;
-				updateRange(1, 0, n - 1, l - 1, l - 1, change);
+				updateRange(1, 0, n - 1, l - 1, r - 1, change);
 
 			}
 			else
