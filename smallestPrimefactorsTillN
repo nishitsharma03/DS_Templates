@@ -30,6 +30,7 @@ const int N = 3e5 + 5;
 int primefac[N];
 void getsmallestprimefactors()
 {
+	prime[1]=1;
 	for ( ll i = 2; i < N; i++)
 	{
 		if (!primefac[i])
