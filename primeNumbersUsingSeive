@@ -29,6 +29,8 @@ const int N = 3e5 + 5;
 bool prime[N];
 void getprimes()
 {
+	prime[0]=1;
+	prime[1]=1;
 	for ( ll i = 2; i < N; i++)
 	{
 		if (!prime[i])
