@@ -25,7 +25,7 @@ ll power(ll x, ll y) {ll res = 1; x %= MOD; while (y) {if (y & 1)res = mul(res, 
 ll mod_inv(ll x) {return power(x, MOD - 2);}
 
 using namespace std;
-const int N=1e3+3;
+const int N=1e5+5;
 int par[N],sz[N];
 int find_set(int a)
 {
@@ -63,7 +63,7 @@ int main()
 #endif
     int n,m;
     cin>>n>>m;
-    fab(0,n,i)
+    fab(0,n+1,i)
     {
     	par[i]=i;
     	sz[i]=1;
