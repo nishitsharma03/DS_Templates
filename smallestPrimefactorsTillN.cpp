@@ -30,7 +30,7 @@ const int N = 3e5 + 5;
 int primefac[N];
 void getsmallestprimefactors()
 {
-	prime[1]=1;
+	primefac[1]=1;
 	for ( ll i = 2; i < N; i++)
 	{
 		if (!primefac[i])
@@ -47,7 +47,7 @@ void getsmallestprimefactors()
 }
 
 
-auto getprimefactors(int n)
+vector<int> getprimefactors(int n)
 {
 	//	Use this to get the result in a map.
 	// map<int,int> fac;
