@@ -8,7 +8,7 @@
 #define pb push_back
 #define db double
 #define mp make_pair
-//#define endl "\n"
+#define endl "\n"
 #define f first
 #define se second
 #define all(x) x.begin(),x.end()
