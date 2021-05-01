@@ -67,6 +67,8 @@ vector<int> getLPS(string &p)
 
 }
 
+// Finds number of occurrences of "p" in "s".
+// TEXT=s and PATTERN=p
 int kmp(string &s, string &p)
 {
 
@@ -117,7 +119,9 @@ int main()
 #endif
     string s, t;
     cin >> s >> t;
-
+    
+    // TEXT=t, PATTERN= s
+    // find number of occurences of "s" in "t" 
     cout << kmp(t, s) << endl;
 
 
