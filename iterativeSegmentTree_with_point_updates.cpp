@@ -48,6 +48,8 @@ public:
 		}
 	}
 //!-------- CAUTION this function works for [l,r) .... mind the open interval on r -------!
+//!--------  Works only for commutative merge function----------!
+//!-------- For non- commutative merge function evaluate ansl, ansr separately on l and r -------!
 	int query(int l, int r)
 	{
 		l += n;
