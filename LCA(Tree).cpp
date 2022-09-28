@@ -84,7 +84,7 @@ int getlca( int u, int v)
 		return v;
 	}
 
-	for ( int i = 0; i <= L; i++)
+	for ( int i = L; i >= 0; i--)
 	{
 		if (!isancestor(a[u][i], v))
 		{
