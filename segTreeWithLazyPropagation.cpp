@@ -107,7 +107,7 @@ public:
 			return placeHolder;
 		if (lazy[node] != placeHolder)
 		{
-			seg[node] += lazy[node];
+			seg[node] = merge(seg[node], lazy[node]);
 			if (l != r)
 			{
 				lazy[2 * node] = merge(lazy[2 * node], lazy[node]);
