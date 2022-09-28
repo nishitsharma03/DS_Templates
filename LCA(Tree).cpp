@@ -1,7 +1,4 @@
-//#pragma GCC optimize "trapv"
-#pragma GCC optimize("Ofast")
-#pragma GCC optimize("O3", "unroll-loops")
-#pragma GCC target("avx,avx2,fma")
+
 #include<bits/stdc++.h>
 #define ll long long int
 #define fab(a,b,i) for(int i=a;i<b;i++)
@@ -25,97 +22,102 @@ ll power(ll x, ll y) {ll res = 1; x %= MOD; while (y) {if (y & 1)res = mul(res, 
 ll mod_inv(ll x) {return power(x, MOD - 2);}
 
 using namespace std;
-const int N = 3e5 + 5;
-const int L = ceil(log2(N));
-vector<int> v[N];
-int in[N], out[N];
-int a[N][L + 1];
-int tim = 0;
-void init(int n)
-{
-	for ( int i = 0; i <= n; i++)
+
+class LCA {
+public:
+	int n;
+	int L;
+	vector<vector<int>> v;
+	vector<int> in, out;
+	vector<vector<int>> a;
+	int tim;
+	LCA(int sz) {
+		this->n = sz;
+		this->L = ceil(log2(n));
+		v.resize(n);
+		in.resize(n);
+		out.resize(n);
+		a = vector<vector<int>> (n, vector<int> (L + 1));
+		tim = 0;
+	}
+
+	void addEdge(int from, int to) {
+		v[from].pb(to);
+	}
+
+
+	void dfs( int src, int par)
 	{
-		v[i].clear();
-		in[i] = 0;
-		out[i] = 0;
-		for ( int j = 0; j <= L; j++)
+		in[src] = tim++;
+
+		a[src][0] = par;
+		for ( int i = 1; i <= L; i++)
 		{
-			a[i][j] = 0;
+			//	Get the s={ 2**(i-1) parent} and then find the 2**(i-1) parent of s.
+			a[src][i] = a[a[src][i - 1]][i - 1];
 		}
-	}
-	tim = 0;
 
-}
-void dfs( int src, int par)
-{
-	in[src] = tim++;
-
-	a[src][0] = par;
-	for ( int i = 1; i <= L; i++)
-	{
-		//	Get the s={ 2**(i-1) parent} and then find the 2**(i-1) parent of s.
-		a[src][i] = a[a[src][i - 1]][i - 1];
-	}
-
-	for ( auto i : v[src])
-	{
-		if (i ^ par)
+		for ( auto i : v[src])
 		{
-			dfs(i, src);
+			if (i ^ par)
+			{
+				dfs(i, src);
+			}
 		}
+
+		out[src] = tim++;
 	}
 
-	out[src] = tim++;
-}
-
-bool isancestor(int u, int v)
-{
-	return (in[u] <= in[v] and out[u] >= out[v]);
-}
-
-int getlca( int u, int v)
-{
-	if (isancestor(u, v))
+	bool isancestor(int u, int v)
 	{
-		return u;
-	}
-	if (isancestor(v, u))
-	{
-		return v;
+		return (in[u] <= in[v] and out[u] >= out[v]);
 	}
 
-	for ( int i = L; i >= 0; i--)
+	int getlca( int u, int v)
 	{
-		if (!isancestor(a[u][i], v))
+		if (isancestor(u, v))
 		{
-			u = a[u][i];
+			return u;
 		}
+		if (isancestor(v, u))
+		{
+			return v;
+		}
+
+		for ( int i = L; i >= 0; i--)
+		{
+			if (!isancestor(a[u][i], v))
+			{
+				u = a[u][i];
+			}
+		}
+
+		return a[u][0];
 	}
 
-	return a[u][0];
-}
+
+};
+
 
 int main()
-{	quick;
-#ifndef ONLINE_JUDGE
-	freopen("D:/sublime/input.txt", "r", stdin);
-	freopen("D:/sublime/output.txt", "w", stdout);
-#endif
+{
+	quick;
+
 	int n;
 	cin >> n;
-	init(n);
-
+	LCA lca(n);
 	for ( int i = 1; i < n; i++)
 	{
 		int x, y;
-		cin >> x >> y;
-		//x--, y--;
-		v[x].pb(y);
-		v[y].pb(x);
+		// cin >> x >> y;
+		//x--,y--;
+		cin >> x;
 
+		lca.addEdge(x, i);
+		lca.addEdge(i, x);
 	}
+	lca.dfs(0, 0);
 
-	dfs(0, 0);
 	int m;
 	cin >> m;
 	int ans = -1;
@@ -128,8 +130,7 @@ int main()
 			ans = x;
 			continue;
 		}
-
-		ans = getlca(ans, x);
+		ans = lca.getlca(ans, x);
 	}
 	cout << ans << endl;
 
